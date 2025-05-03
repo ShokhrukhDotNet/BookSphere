@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSphere.Api", "BookSphere.Api\BookSphere.Api.csproj", "{A8C41989-C54E-4E65-83ED-CAEB0003C84E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSphere.Api.Tests.Unit", "BookSphere.Api.Tests.Unit\BookSphere.Api.Tests.Unit.csproj", "{A37CBBAA-5052-4E5E-B1BD-BD0036026D43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A8C41989-C54E-4E65-83ED-CAEB0003C84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8C41989-C54E-4E65-83ED-CAEB0003C84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8C41989-C54E-4E65-83ED-CAEB0003C84E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A37CBBAA-5052-4E5E-B1BD-BD0036026D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A37CBBAA-5052-4E5E-B1BD-BD0036026D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A37CBBAA-5052-4E5E-B1BD-BD0036026D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A37CBBAA-5052-4E5E-B1BD-BD0036026D43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
