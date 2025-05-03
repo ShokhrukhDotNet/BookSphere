@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSphere.Api", "BookSpher
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSphere.Api.Tests.Unit", "BookSphere.Api.Tests.Unit\BookSphere.Api.Tests.Unit.csproj", "{A37CBBAA-5052-4E5E-B1BD-BD0036026D43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSphere.Api.Infrastructure.Build", "BookSphere.Api.Infrastructure.Build\BookSphere.Api.Infrastructure.Build.csproj", "{FB1A3EEE-0A52-437B-B7AD-5F4EAAE8C6F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A37CBBAA-5052-4E5E-B1BD-BD0036026D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A37CBBAA-5052-4E5E-B1BD-BD0036026D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A37CBBAA-5052-4E5E-B1BD-BD0036026D43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB1A3EEE-0A52-437B-B7AD-5F4EAAE8C6F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB1A3EEE-0A52-437B-B7AD-5F4EAAE8C6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB1A3EEE-0A52-437B-B7AD-5F4EAAE8C6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB1A3EEE-0A52-437B-B7AD-5F4EAAE8C6F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
