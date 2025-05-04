@@ -3,11 +3,13 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
-namespace BookSphere.Api.Tests.Unit
+using System.Threading.Tasks;
+using BookSphere.Api.Models.Foundations.Readers;
+
+namespace BookSphere.Api.Services.Foundations.Readers
 {
-    public class DeleteMe
+    public interface IReaderService
     {
-        [Fact]
-        public void ShouldBeTrue() => Assert.True(true);
+        ValueTask<Reader> AddReaderAsync(Reader reader);
     }
 }
