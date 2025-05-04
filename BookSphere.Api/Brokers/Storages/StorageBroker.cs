@@ -3,13 +3,14 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System.Threading.Tasks;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace BookSphere.Api.Brokers.Storages
 {
-    public partial class StorageBroker : EFxceptionsContext
+    public partial class StorageBroker : EFxceptionsContext, IStorageBroker
     {
         private readonly IConfiguration configuration;
 
@@ -17,6 +18,15 @@ namespace BookSphere.Api.Brokers.Storages
         {
             this.configuration = configuration;
             this.Database.Migrate();
+        }
+
+        public async ValueTask<T> InsertAsync<T>(T @object)
+        {
+            var broker = new StorageBroker(this.configuration);
+            broker.Entry(@object).State = EntityState.Added;
+            await broker.SaveChangesAsync();
+
+            return @object;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
