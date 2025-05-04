@@ -29,6 +29,6 @@ namespace BookSphere.Api.Services.Foundations.Readers
         }
 
         public ValueTask<Reader> AddReaderAsync(Reader reader) =>
-            throw new NotImplementedException();
+            this.storageBroker.InsertReaderAsync(reader);
     }
 }
