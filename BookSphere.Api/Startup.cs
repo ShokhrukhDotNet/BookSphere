@@ -3,6 +3,7 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using BookSphere.Api.Brokers.DateTimes;
 using BookSphere.Api.Brokers.Loggings;
 using BookSphere.Api.Brokers.Storages;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +46,7 @@ namespace BookSphere.Api
         {
             services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
+            services.AddTransient<IDateTimeBroker, DateTimeBroker>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
