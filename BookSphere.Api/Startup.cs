@@ -3,6 +3,7 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using BookSphere.Api.Brokers.Loggings;
 using BookSphere.Api.Brokers.Storages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,7 @@ namespace BookSphere.Api
 
             services.AddControllers();
             services.AddDbContext<StorageBroker>();
-            services.AddTransient<IStorageBroker, StorageBroker>();
+            AddBrokers(services);
 
             services.AddSwaggerGen(options =>
             {
@@ -38,6 +39,12 @@ namespace BookSphere.Api
                     name: "v1",
                     info: apiInfo);
             });
+        }
+
+        private static void AddBrokers(IServiceCollection services)
+        {
+            services.AddTransient<IStorageBroker, StorageBroker>();
+            services.AddTransient<ILoggingBroker, LoggingBroker>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
