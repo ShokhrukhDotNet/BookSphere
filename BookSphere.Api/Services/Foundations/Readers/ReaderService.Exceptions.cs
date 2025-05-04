@@ -24,6 +24,10 @@ namespace BookSphere.Api.Services.Foundations.Readers
             {
                 throw CreateAndLogValidationException(nullReaderException);
             }
+            catch (InvalidReaderException invalidReaderException)
+            {
+                throw CreateAndLogValidationException(invalidReaderException);
+            }
         }
 
         private ReaderValidationException CreateAndLogValidationException(Xeption exception)

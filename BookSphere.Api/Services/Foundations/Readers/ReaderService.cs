@@ -31,7 +31,7 @@ namespace BookSphere.Api.Services.Foundations.Readers
         public ValueTask<Reader> AddReaderAsync(Reader reader) =>
         TryCatch(async () =>
         {
-            ValidateReaderNotNull(reader);
+            ValidateReaderOnAdd(reader);
 
             return await this.storageBroker.InsertReaderAsync(reader);
         });
