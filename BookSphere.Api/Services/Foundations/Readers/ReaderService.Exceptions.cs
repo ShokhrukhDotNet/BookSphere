@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Readers;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace BookSphere.Api.Services.Foundations.Readers
@@ -28,6 +29,12 @@ namespace BookSphere.Api.Services.Foundations.Readers
             {
                 throw CreateAndLogValidationException(invalidReaderException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedReaderStorageException = new FailedReaderStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedReaderStorageException);
+            }
         }
 
         private ReaderValidationException CreateAndLogValidationException(Xeption exception)
@@ -38,6 +45,14 @@ namespace BookSphere.Api.Services.Foundations.Readers
             this.loggingBroker.LogError(readerValidationException);
 
             return readerValidationException;
+        }
+
+        private ReaderDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var readerDependencyException = new ReaderDependencyException(exception);
+            this.loggingBroker.LogCritical(readerDependencyException);
+
+            return readerDependencyException;
         }
     }
 }
