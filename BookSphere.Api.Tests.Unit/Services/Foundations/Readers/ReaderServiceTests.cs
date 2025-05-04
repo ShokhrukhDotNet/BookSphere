@@ -5,11 +5,13 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using BookSphere.Api.Brokers.DateTimes;
 using BookSphere.Api.Brokers.Loggings;
 using BookSphere.Api.Brokers.Storages;
 using BookSphere.Api.Models.Foundations.Readers;
 using BookSphere.Api.Services.Foundations.Readers;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -40,6 +42,9 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
+
+        private static SqlException GetSqlError() =>
+            (SqlException)RuntimeHelpers.GetUninitializedObject(typeof(SqlException));
 
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
