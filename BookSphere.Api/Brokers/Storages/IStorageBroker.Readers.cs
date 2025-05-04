@@ -5,15 +5,11 @@
 
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Readers;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookSphere.Api.Brokers.Storages
 {
-    public partial class StorageBroker
+    public partial interface IStorageBroker
     {
-        public DbSet<Reader> Readers { get; set; }
-
-        public async ValueTask<Reader> InsertReaderAsync(Reader reader) =>
-            await InsertAsync(reader);
+        ValueTask<Reader> InsertReaderAsync(Reader reader);
     }
 }
