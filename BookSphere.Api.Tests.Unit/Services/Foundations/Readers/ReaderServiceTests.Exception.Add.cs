@@ -5,6 +5,7 @@
 
 using BookSphere.Api.Models.Foundations.Readers;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Moq;
 using System.Threading.Tasks;
@@ -43,6 +44,48 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(
                     expectedReaderDependencyException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationOnAddIfDuplicateKeyErrorOccursAndLogItAsync()
+        {
+            // given
+            Reader someReader = CreateRandomReader();
+            string someMessage = GetRandomString();
+
+            var duplicateKeyException =
+                new DuplicateKeyException(someMessage);
+
+            var alreadyExistReaderException =
+                new AlreadyExistReaderException(duplicateKeyException);
+
+            var expectedReaderDependencyValidationException =
+                new ReaderDependencyValidationException(alreadyExistReaderException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertReaderAsync(someReader))
+                    .ThrowsAsync(duplicateKeyException);
+
+            // when
+            ValueTask<Reader> addReaderTask =
+                this.readerService.AddReaderAsync(someReader);
+
+            // then
+            await Assert.ThrowsAsync<ReaderDependencyValidationException>(() =>
+                addReaderTask.AsTask());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertReaderAsync(someReader),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedReaderDependencyValidationException))),
                         Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
