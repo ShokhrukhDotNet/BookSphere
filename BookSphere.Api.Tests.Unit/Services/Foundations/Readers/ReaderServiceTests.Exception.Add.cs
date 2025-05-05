@@ -8,6 +8,7 @@ using BookSphere.Api.Models.Foundations.Readers.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Moq;
+using System;
 using System.Threading.Tasks;
 
 namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
@@ -86,6 +87,45 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedReaderDependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Reader someReader = CreateRandomReader();
+            var serviceException = new Exception();
+
+            var failedReaderServiceException =
+                new FailedReaderServiceException(serviceException);
+
+            var expectedReaderServiceException =
+                new ReaderServiceException(failedReaderServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertReaderAsync(someReader))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<Reader> addReaderTask =
+                this.readerService.AddReaderAsync(someReader);
+
+            // then
+            await Assert.ThrowsAsync<ReaderServiceException>(() =>
+                addReaderTask.AsTask());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertReaderAsync(someReader),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedReaderServiceException))),
                         Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
