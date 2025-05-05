@@ -3,11 +3,14 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
-namespace BookSphere.Api.Tests.Unit
+using Xeptions;
+
+namespace BookSphere.Api.Models.Foundations.Readers.Exceptions
 {
-    public class DeleteMe
+    public class NullReaderException : Xeption
     {
-        [Fact]
-        public void ShouldBeTrue() => Assert.True(true);
+        public NullReaderException()
+            : base(message: "Reader is null")
+        { }
     }
 }
