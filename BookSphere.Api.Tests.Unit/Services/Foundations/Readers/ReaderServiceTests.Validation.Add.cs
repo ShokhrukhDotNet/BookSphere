@@ -3,10 +3,10 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Readers;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
 using Moq;
-using System.Threading.Tasks;
 
 namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
 {
