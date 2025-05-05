@@ -6,6 +6,7 @@
 using BookSphere.Api.Brokers.DateTimes;
 using BookSphere.Api.Brokers.Loggings;
 using BookSphere.Api.Brokers.Storages;
+using BookSphere.Api.Services.Foundations.Readers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,7 @@ namespace BookSphere.Api
             services.AddControllers();
             services.AddDbContext<StorageBroker>();
             AddBrokers(services);
+            AddFoundationServices(services);
 
             services.AddSwaggerGen(options =>
             {
@@ -47,6 +49,11 @@ namespace BookSphere.Api
             services.AddTransient<IStorageBroker, StorageBroker>();
             services.AddTransient<ILoggingBroker, LoggingBroker>();
             services.AddTransient<IDateTimeBroker, DateTimeBroker>();
+        }
+
+        private static void AddFoundationServices(IServiceCollection services)
+        {
+            services.AddTransient<IReaderService, ReaderService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
