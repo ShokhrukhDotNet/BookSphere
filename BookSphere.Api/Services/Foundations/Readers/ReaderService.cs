@@ -38,6 +38,6 @@ namespace BookSphere.Api.Services.Foundations.Readers
         });
 
         public IQueryable<Reader> RetrieveAllReaders() =>
-            throw new NotImplementedException();
+            this.storageBroker.SelectAllReaders();
     }
 }
