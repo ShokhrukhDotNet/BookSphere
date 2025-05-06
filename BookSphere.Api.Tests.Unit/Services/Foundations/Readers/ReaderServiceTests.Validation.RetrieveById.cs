@@ -6,7 +6,6 @@
 using Moq;
 using System.Threading.Tasks;
 using System;
-using Xunit.Abstractions;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
 using BookSphere.Api.Models.Foundations.Readers;
 using FluentAssertions;
@@ -49,6 +48,46 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfReaderNotFoundAndLogItAsync()
+        {
+            // given
+            Guid someReaderId = Guid.NewGuid();
+            Reader noReader = null;
+
+            var notFoundReaderException =
+                new NotFoundReaderException(someReaderId);
+
+            var expectedReaderValidationException =
+                new ReaderValidationException(notFoundReaderException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectReaderByIdAsync(
+                    It.IsAny<Guid>())).ReturnsAsync(noReader);
+
+            // when
+            ValueTask<Reader> retriveByIdReaderTask =
+                this.readerService.RetrieveReaderByIdAsync(someReaderId);
+
+            var actualReaderValidationException =
+                await Assert.ThrowsAsync<ReaderValidationException>(
+                    retriveByIdReaderTask.AsTask);
+
+            // then
+            actualReaderValidationException.Should().BeEquivalentTo(expectedReaderValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectReaderByIdAsync(someReaderId), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedReaderValidationException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
     }
