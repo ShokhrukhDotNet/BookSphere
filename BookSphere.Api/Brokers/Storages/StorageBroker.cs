@@ -3,6 +3,7 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,20 @@ namespace BookSphere.Api.Brokers.Storages
             await broker.SaveChangesAsync();
 
             return @object;
+        }
+
+        public IQueryable<T> SelectAll<T>() where T : class
+        {
+            var broker = new StorageBroker(configuration);
+
+            return broker.Set<T>();
+        }
+
+        public async ValueTask<T> SelectAsync<T>(params object[] objectsId) where T : class
+        {
+            var broker = new StorageBroker(configuration);
+
+            return await broker.FindAsync<T>(objectsId);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
