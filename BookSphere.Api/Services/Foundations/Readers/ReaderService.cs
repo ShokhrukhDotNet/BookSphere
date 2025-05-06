@@ -37,8 +37,15 @@ namespace BookSphere.Api.Services.Foundations.Readers
             return await this.storageBroker.InsertReaderAsync(reader);
         });
 
-        public async ValueTask<Reader> RetrieveReaderByIdAsync(Guid readerId) =>
-            await this.storageBroker.SelectReaderByIdAsync(readerId);
+        public ValueTask<Reader> RetrieveReaderByIdAsync(Guid readerId) =>
+        TryCatch(async () =>
+        {
+            ValidateReaderId(readerId);
+
+            Reader maybeReader = await this.storageBroker.SelectReaderByIdAsync(readerId);
+
+            return maybeReader;
+        });
 
         public IQueryable<Reader> RetrieveAllReaders() =>
             TryCatch(() => this.storageBroker.SelectAllReaders());

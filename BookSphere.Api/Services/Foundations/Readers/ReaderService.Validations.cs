@@ -48,6 +48,9 @@ namespace BookSphere.Api.Services.Foundations.Readers
             Message = "Date is required"
         };
 
+        private static void ValidateReaderId(Guid readerId) =>
+            Validate((Rule: IsInvalid(readerId), Parameter: nameof(Reader.Id)));
+
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidReaderException = new InvalidReaderException();
