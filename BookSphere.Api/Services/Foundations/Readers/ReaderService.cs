@@ -3,6 +3,8 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BookSphere.Api.Brokers.DateTimes;
 using BookSphere.Api.Brokers.Loggings;
@@ -34,5 +36,8 @@ namespace BookSphere.Api.Services.Foundations.Readers
 
             return await this.storageBroker.InsertReaderAsync(reader);
         });
+
+        public IQueryable<Reader> RetrieveAllReaders() =>
+            throw new NotImplementedException();
     }
 }
