@@ -68,6 +68,13 @@ namespace BookSphere.Api.Services.Foundations.Readers
 
                 throw CreateAndLogCriticalDependencyException(failedReaderStorageException);
             }
+            catch (Exception exception)
+            {
+                var failedReaderServiceException =
+                    new FailedReaderServiceException(exception);
+
+                throw CreateAndLogServiceException(failedReaderServiceException);
+            }
         }
 
         private ReaderValidationException CreateAndLogValidationException(Xeption exception)
