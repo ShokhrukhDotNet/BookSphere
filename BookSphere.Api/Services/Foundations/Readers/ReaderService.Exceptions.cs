@@ -39,6 +39,10 @@ namespace BookSphere.Api.Services.Foundations.Readers
 
                 throw CreateAndLogCriticalDependencyException(failedReaderStorageException);
             }
+            catch (NotFoundReaderException notFoundReaderException)
+            {
+                throw CreateAndLogValidationException(notFoundReaderException);
+            }
             catch (DuplicateKeyException duplicateKeyException)
             {
                 var alreadyExistReaderException =
