@@ -4,6 +4,7 @@
 //==================================================
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Readers;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
@@ -16,6 +17,7 @@ namespace BookSphere.Api.Services.Foundations.Readers
     public partial class ReaderService
     {
         private delegate ValueTask<Reader> ReturningReaderFunction();
+        private delegate IQueryable<Reader> ReturningReadersFunction();
 
         private async ValueTask<Reader> TryCatch(ReturningReaderFunction returningReaderFunction)
         {
@@ -37,12 +39,38 @@ namespace BookSphere.Api.Services.Foundations.Readers
 
                 throw CreateAndLogCriticalDependencyException(failedReaderStorageException);
             }
+            catch (NotFoundReaderException notFoundReaderException)
+            {
+                throw CreateAndLogValidationException(notFoundReaderException);
+            }
             catch (DuplicateKeyException duplicateKeyException)
             {
                 var alreadyExistReaderException =
                     new AlreadyExistReaderException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistReaderException);
+            }
+            catch (Exception exception)
+            {
+                var failedReaderServiceException =
+                    new FailedReaderServiceException(exception);
+
+                throw CreateAndLogServiceException(failedReaderServiceException);
+            }
+        }
+
+        private IQueryable<Reader> TryCatch(ReturningReadersFunction returningReadersFunction)
+        {
+            try
+            {
+                return returningReadersFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedReaderStorageException =
+                    new FailedReaderStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedReaderStorageException);
             }
             catch (Exception exception)
             {
