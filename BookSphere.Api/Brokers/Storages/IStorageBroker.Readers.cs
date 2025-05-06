@@ -3,6 +3,8 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System.Linq;
+using System;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Readers;
 
@@ -11,5 +13,7 @@ namespace BookSphere.Api.Brokers.Storages
     public partial interface IStorageBroker
     {
         ValueTask<Reader> InsertReaderAsync(Reader reader);
+        IQueryable<Reader> SelectAllReaders();
+        ValueTask<Reader> SelectReaderByIdAsync(Guid readerId);
     }
 }
