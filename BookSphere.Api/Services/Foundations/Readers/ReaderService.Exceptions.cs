@@ -50,13 +50,13 @@ namespace BookSphere.Api.Services.Foundations.Readers
 
                 throw CreateAndLogDependencyValidationException(alreadyExistReaderException);
             }
-            //catch (Exception exception)
-            //{
-            //    var failedReaderServiceException =
-            //        new FailedReaderServiceException(exception);
+            catch (Exception exception)
+            {
+                var failedReaderServiceException =
+                    new FailedReaderServiceException(exception);
 
-            //    throw CreateAndLogServiceException(failedReaderServiceException);
-            //}
+                throw CreateAndLogServiceException(failedReaderServiceException);
+            }
         }
 
         private IQueryable<Reader> TryCatch(ReturningReadersFunction returningReadersFunction)
