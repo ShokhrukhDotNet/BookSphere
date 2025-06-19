@@ -3,12 +3,12 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
-using Moq;
-using System.Threading.Tasks;
 using System;
-using BookSphere.Api.Models.Foundations.Readers.Exceptions;
+using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Readers;
+using BookSphere.Api.Models.Foundations.Readers.Exceptions;
 using FluentAssertions;
+using Moq;
 
 namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
 {
