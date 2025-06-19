@@ -3,6 +3,8 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Readers;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
@@ -44,6 +46,52 @@ namespace BookSphere.Api.Controllers
             catch (ReaderDependencyValidationException readerDependencyValidationException)
             {
                 return BadRequest(readerDependencyValidationException.InnerException);
+            }
+            catch (ReaderDependencyException readerDependencyException)
+            {
+                return InternalServerError(readerDependencyException.InnerException);
+            }
+            catch (ReaderServiceException readerServiceException)
+            {
+                return InternalServerError(readerServiceException.InnerException);
+            }
+        }
+
+        [HttpGet("ById")]
+        public async ValueTask<ActionResult<Reader>> GetReaderByIdAsync(Guid readerId)
+        {
+            try
+            {
+                return await this.readerService.RetrieveReaderByIdAsync(readerId);
+            }
+            catch (ReaderDependencyException readerDependencyException)
+            {
+                return InternalServerError(readerDependencyException.InnerException);
+            }
+            catch (ReaderValidationException readerValidationException)
+                when (readerValidationException.InnerException is InvalidReaderException)
+            {
+                return BadRequest(readerValidationException.InnerException);
+            }
+            catch (ReaderValidationException readerValidationException)
+                when (readerValidationException.InnerException is NotFoundReaderException)
+            {
+                return NotFound(readerValidationException.InnerException);
+            }
+            catch (ReaderServiceException readerServiceException)
+            {
+                return InternalServerError(readerServiceException.InnerException);
+            }
+        }
+
+        [HttpGet("All")]
+        public ActionResult<IQueryable<Reader>> GetAllReaders()
+        {
+            try
+            {
+                IQueryable<Reader> allReaders = this.readerService.RetrieveAllReaders();
+
+                return Ok(allReaders);
             }
             catch (ReaderDependencyException readerDependencyException)
             {
