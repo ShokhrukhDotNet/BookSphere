@@ -3,11 +3,11 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
-using System;
 
 namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
 {
