@@ -22,5 +22,8 @@ namespace BookSphere.Api.Brokers.Storages
 
         public async ValueTask<Reader> SelectReaderByIdAsync(Guid readerId) =>
             await SelectAsync<Reader>(readerId);
+
+        public async ValueTask<Reader> UpdateReaderAsync(Reader reader) =>
+            await UpdateAsync(reader);
     }
 }
