@@ -52,7 +52,12 @@ namespace BookSphere.Api.Services.Foundations.Readers
         public IQueryable<Reader> RetrieveAllReaders() =>
             TryCatch(() => this.storageBroker.SelectAllReaders());
 
-        public ValueTask<Reader> ModifyReaderAsync(Reader reader) =>
-            throw new NotImplementedException();
+        public async ValueTask<Reader> ModifyReaderAsync(Reader reader)
+        {
+            Reader maybeReader =
+                await this.storageBroker.SelectReaderByIdAsync(reader.Id);
+
+            return await this.storageBroker.UpdateReaderAsync(reader);
+        }
     }
 }
