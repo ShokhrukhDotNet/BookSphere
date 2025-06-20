@@ -51,5 +51,8 @@ namespace BookSphere.Api.Services.Foundations.Readers
 
         public IQueryable<Reader> RetrieveAllReaders() =>
             TryCatch(() => this.storageBroker.SelectAllReaders());
+
+        public ValueTask<Reader> ModifyReaderAsync(Reader reader) =>
+            throw new NotImplementedException();
     }
 }
