@@ -44,6 +44,12 @@ namespace BookSphere.Api.Services.Foundations.Readers
             {
                 throw CreateAndLogValidationException(notFoundReaderException);
             }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedReaderException = new LockedReaderException(dbUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedReaderException);
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedReaderStorageException = new FailedReaderStorageException(dbUpdateException);
