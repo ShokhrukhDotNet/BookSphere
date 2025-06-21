@@ -55,8 +55,6 @@ namespace BookSphere.Api.Services.Foundations.Readers
         public ValueTask<Reader> ModifyReaderAsync(Reader reader) =>
         TryCatch(async () =>
         {
-            ValidateReaderOnAdd(reader);
-
             Reader maybeReader =
                 await this.storageBroker.SelectReaderByIdAsync(reader.Id);
 

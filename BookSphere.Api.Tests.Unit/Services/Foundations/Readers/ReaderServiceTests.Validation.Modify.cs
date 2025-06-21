@@ -46,5 +46,63 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public async Task ShouldThrowValidationExceptionOnModifyIfReaderIsInvalidAndLogItAsync(string invalidString)
+        {
+            // given
+            Reader invalidReader = new Reader
+            {
+                FirstName = invalidString
+            };
+
+            var invalidReaderException =
+                new InvalidReaderException();
+
+            invalidReaderException.AddData(
+                key: nameof(Reader.Id),
+                values: "Id is required");
+
+            invalidReaderException.AddData(
+                key: nameof(Reader.FirstName),
+                values: "Text is required");
+
+            invalidReaderException.AddData(
+                key: nameof(Reader.LastName),
+                values: "Text is required");
+
+            invalidReaderException.AddData(
+                key: nameof(Reader.DateOfBirth),
+                values: "Date is required");
+
+            var expectedReaderValidationException =
+                new ReaderValidationException(invalidReaderException);
+
+            // when
+            ValueTask<Reader> modifyReaderTask =
+                this.readerService.ModifyReaderAsync(invalidReader);
+
+            ReaderValidationException actualReaderValidationException =
+                await Assert.ThrowsAsync<ReaderValidationException>(
+                    modifyReaderTask.AsTask);
+
+            // then
+            actualReaderValidationException.Should()
+                .BeEquivalentTo(expectedReaderValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedReaderValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateReaderAsync(It.IsAny<Reader>()), Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
