@@ -151,5 +151,51 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnModifyIfDatabaseUpdateErrorOccursAndLogItAsync()
+        {
+            // given
+            Reader randomReader = CreateRandomReader();
+            Reader someReader = randomReader;
+            Guid readerId = someReader.Id;
+            Exception serviceException = new Exception();
+
+            var failedReaderServiceException =
+                new FailedReaderServiceException(serviceException);
+
+            var expectedReaderServiceException =
+                new ReaderServiceException(failedReaderServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectReaderByIdAsync(readerId))
+                    .Throws(serviceException);
+
+            // when
+            ValueTask<Reader> modifyReaderTask =
+                this.readerService.ModifyReaderAsync(someReader);
+
+            ReaderServiceException actualReaderServiceException =
+                await Assert.ThrowsAsync<ReaderServiceException>(
+                    modifyReaderTask.AsTask);
+
+            // then
+            actualReaderServiceException.Should()
+                .BeEquivalentTo(expectedReaderServiceException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedReaderServiceException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectReaderByIdAsync(readerId), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdateReaderAsync(someReader), Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
