@@ -33,12 +33,12 @@ namespace BookSphere.Api.Services.Foundations.Readers
             {
                 throw CreateAndLogValidationException(invalidReaderException);
             }
-            catch (SqlException sqlException)
-            {
-                var failedReaderStorageException = new FailedReaderStorageException(sqlException);
+            //catch (SqlException sqlException)
+            //{
+            //    var failedReaderStorageException = new FailedReaderStorageException(sqlException);
 
-                throw CreateAndLogCriticalDependencyException(failedReaderStorageException);
-            }
+            //    throw CreateAndLogCriticalDependencyException(failedReaderStorageException);
+            //}
             catch (NotFoundReaderException notFoundReaderException)
             {
                 throw CreateAndLogValidationException(notFoundReaderException);
