@@ -59,6 +59,17 @@ namespace BookSphere.Api.Services.Foundations.Readers
             }
         }
 
+        private static void ValidateReaderOnModify(Reader reader)
+        {
+            ValidateReaderNotNull(reader);
+
+            Validate(
+                (Rule: IsInvalid(reader.Id), Parameter: nameof(Reader.Id)),
+                (Rule: IsInvalid(reader.FirstName), Parameter: nameof(Reader.FirstName)),
+                (Rule: IsInvalid(reader.LastName), Parameter: nameof(Reader.LastName)),
+                (Rule: IsInvalid(reader.DateOfBirth), Parameter: nameof(Reader.DateOfBirth)));
+        }
+
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidReaderException = new InvalidReaderException();
