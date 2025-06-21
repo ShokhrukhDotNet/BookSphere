@@ -10,6 +10,7 @@ using BookSphere.Api.Models.Foundations.Readers;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace BookSphere.Api.Services.Foundations.Readers
@@ -42,6 +43,18 @@ namespace BookSphere.Api.Services.Foundations.Readers
             catch (NotFoundReaderException notFoundReaderException)
             {
                 throw CreateAndLogValidationException(notFoundReaderException);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedReaderException = new LockedReaderException(dbUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedReaderException);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedReaderStorageException = new FailedReaderStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedReaderStorageException);
             }
             catch (DuplicateKeyException duplicateKeyException)
             {
@@ -108,6 +121,14 @@ namespace BookSphere.Api.Services.Foundations.Readers
             this.loggingBroker.LogError(readerDependencyValidationException);
 
             return readerDependencyValidationException;
+        }
+
+        private ReaderDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var readerDependencyException = new ReaderDependencyException(exception);
+            this.loggingBroker.LogError(readerDependencyException);
+
+            return readerDependencyException;
         }
 
         private ReaderServiceException CreateAndLogServiceException(Xeption exception)
