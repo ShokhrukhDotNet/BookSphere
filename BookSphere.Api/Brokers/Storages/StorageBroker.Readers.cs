@@ -25,5 +25,8 @@ namespace BookSphere.Api.Brokers.Storages
 
         public async ValueTask<Reader> UpdateReaderAsync(Reader reader) =>
             await UpdateAsync(reader);
+
+        public async ValueTask<Reader> DeleteReaderAsync(Reader reader) =>
+            await DeleteAsync(reader);
     }
 }
