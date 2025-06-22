@@ -16,5 +16,6 @@ namespace BookSphere.Api.Brokers.Storages
         IQueryable<Reader> SelectAllReaders();
         ValueTask<Reader> SelectReaderByIdAsync(Guid readerId);
         ValueTask<Reader> UpdateReaderAsync(Reader reader);
+        ValueTask<Reader> DeleteReaderAsync(Reader reader);
     }
 }
