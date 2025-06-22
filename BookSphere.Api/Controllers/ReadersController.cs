@@ -102,5 +102,38 @@ namespace BookSphere.Api.Controllers
                 return InternalServerError(readerServiceException.InnerException);
             }
         }
+
+        [HttpPut]
+        public async ValueTask<ActionResult<Reader>> PutReaderAsync(Reader reader)
+        {
+            try
+            {
+                Reader modifyReader =
+                    await this.readerService.ModifyReaderAsync(reader);
+
+                return Ok(modifyReader);
+            }
+            catch (ReaderValidationException readerValidationException)
+                when (readerValidationException.InnerException is NotFoundReaderException)
+            {
+                return NotFound(readerValidationException.InnerException);
+            }
+            catch (ReaderValidationException readerValidationException)
+            {
+                return BadRequest(readerValidationException.InnerException);
+            }
+            catch (ReaderDependencyValidationException readerDependencyValidationException)
+            {
+                return Conflict(readerDependencyValidationException.InnerException);
+            }
+            catch (ReaderDependencyException readerDependencyException)
+            {
+                return InternalServerError(readerDependencyException.InnerException);
+            }
+            catch (ReaderServiceException readerServiceException)
+            {
+                return InternalServerError(readerServiceException.InnerException);
+            }
+        }
     }
 }
