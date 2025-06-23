@@ -73,6 +73,8 @@ namespace BookSphere.Api.Services.Foundations.Readers
             Reader maybeReader =
                 await this.storageBroker.SelectReaderByIdAsync(readerId);
 
+            ValidateStorageReader(maybeReader, readerId);
+
             return await this.storageBroker.DeleteReaderAsync(maybeReader);
         });
     }
