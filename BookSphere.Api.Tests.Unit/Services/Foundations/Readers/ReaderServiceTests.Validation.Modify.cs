@@ -63,7 +63,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
                 new InvalidReaderException();
 
             invalidReaderException.AddData(
-                key: nameof(Reader.Id),
+                key: nameof(Reader.ReaderId),
                 values: "Id is required");
 
             invalidReaderException.AddData(
@@ -114,13 +114,13 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             Reader nullReader = null;
 
             var notFoundReaderException =
-                new NotFoundReaderException(nonExistReader.Id);
+                new NotFoundReaderException(nonExistReader.ReaderId);
 
             var expectedReaderValidationException =
                 new ReaderValidationException(notFoundReaderException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectReaderByIdAsync(nonExistReader.Id))
+                broker.SelectReaderByIdAsync(nonExistReader.ReaderId))
                     .ReturnsAsync(nullReader);
 
             // when
@@ -136,7 +136,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
                 .BeEquivalentTo(expectedReaderValidationException);
 
             this.storageBrokerMock.Verify(broker =>
-                broker.SelectReaderByIdAsync(nonExistReader.Id), Times.Once);
+                broker.SelectReaderByIdAsync(nonExistReader.ReaderId), Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(

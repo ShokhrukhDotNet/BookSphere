@@ -9,7 +9,7 @@ namespace BookSphere.Api.Models.Foundations.Readers
 {
     public class Reader
     {
-        public Guid Id { get; set; }
+        public Guid ReaderId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTimeOffset DateOfBirth { get; set; }

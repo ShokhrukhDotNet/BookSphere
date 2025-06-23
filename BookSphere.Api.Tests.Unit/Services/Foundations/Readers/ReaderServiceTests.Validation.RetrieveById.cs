@@ -22,7 +22,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             var invalidReaderException = new InvalidReaderException();
 
             invalidReaderException.AddData(
-                key: nameof(Reader.Id),
+                key: nameof(Reader.ReaderId),
                 values: "Id is required");
 
             var expectedReaderValidationException =

@@ -1,9 +1,4 @@
-﻿//==================================================
-// Copyright (c) Coalition of Good-Hearted Engineers
-// Free To Use To Bridge Knowledge and Curiosity
-//==================================================
-
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -20,14 +15,14 @@ namespace BookSphere.Api.Migrations
                 name: "Readers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReaderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Readers", x => x.Id);
+                    table.PrimaryKey("PK_Readers", x => x.ReaderId);
                 });
         }
 
