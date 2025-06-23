@@ -4,6 +4,7 @@
 //==================================================
 
 using System;
+using System.Linq.Expressions;
 using BookSphere.Api.Brokers.DateTimes;
 using BookSphere.Api.Brokers.Loggings;
 using BookSphere.Api.Brokers.Storages;
@@ -11,6 +12,7 @@ using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Services.Foundations.Books;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace BookSphere.Api.Tests.Unit.Services.Foundations.Books
 {
@@ -38,6 +40,9 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Books
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static Filler<Book> CreateBookFiller(DateTimeOffset date)
         {
