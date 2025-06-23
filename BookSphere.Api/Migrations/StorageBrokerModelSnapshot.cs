@@ -22,6 +22,31 @@ namespace BookSphere.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BookSphere.Api.Models.Foundations.Books.Book", b =>
+                {
+                    b.Property<Guid>("BookId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BookTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Genre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ReaderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BookId");
+
+                    b.HasIndex("ReaderId");
+
+                    b.ToTable("Book");
+                });
+
             modelBuilder.Entity("BookSphere.Api.Models.Foundations.Readers.Reader", b =>
                 {
                     b.Property<Guid>("ReaderId")
@@ -40,6 +65,22 @@ namespace BookSphere.Api.Migrations
                     b.HasKey("ReaderId");
 
                     b.ToTable("Readers");
+                });
+
+            modelBuilder.Entity("BookSphere.Api.Models.Foundations.Books.Book", b =>
+                {
+                    b.HasOne("BookSphere.Api.Models.Foundations.Readers.Reader", "Reader")
+                        .WithMany("Books")
+                        .HasForeignKey("ReaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Reader");
+                });
+
+            modelBuilder.Entity("BookSphere.Api.Models.Foundations.Readers.Reader", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

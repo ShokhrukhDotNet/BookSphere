@@ -4,6 +4,9 @@
 //==================================================
 
 using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using BookSphere.Api.Models.Foundations.Books;
 
 namespace BookSphere.Api.Models.Foundations.Readers
 {
@@ -13,5 +16,7 @@ namespace BookSphere.Api.Models.Foundations.Readers
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTimeOffset DateOfBirth { get; set; }
+        [JsonIgnore]
+        public List<Book>? Books { get; set; }
     }
 }
