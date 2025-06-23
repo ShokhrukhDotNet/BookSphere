@@ -64,5 +64,8 @@ namespace BookSphere.Api.Services.Foundations.Readers
 
             return await this.storageBroker.UpdateReaderAsync(reader);
         });
+
+        public ValueTask<Reader> RemoveReaderByIdAsync(Guid readerId) =>
+            throw new NotImplementedException();
     }
 }
