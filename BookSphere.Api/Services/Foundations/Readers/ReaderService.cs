@@ -65,12 +65,15 @@ namespace BookSphere.Api.Services.Foundations.Readers
             return await this.storageBroker.UpdateReaderAsync(reader);
         });
 
-        public async ValueTask<Reader> RemoveReaderByIdAsync(Guid readerId)
+        public ValueTask<Reader> RemoveReaderByIdAsync(Guid readerId) =>
+        TryCatch(async () =>
         {
+            ValidateReaderId(readerId);
+
             Reader maybeReader =
                 await this.storageBroker.SelectReaderByIdAsync(readerId);
 
             return await this.storageBroker.DeleteReaderAsync(maybeReader);
-        }
+        });
     }
 }
