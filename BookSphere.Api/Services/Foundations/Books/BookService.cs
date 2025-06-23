@@ -29,6 +29,6 @@ namespace BookSphere.Api.Services.Foundations.Books
         }
 
         public async ValueTask<Book> AddBookAsync(Book book) =>
-            throw new NotImplementedException();
+            await this.storageBroker.InsertBookAsync(book);
     }
 }
