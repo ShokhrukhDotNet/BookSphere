@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Readers;
 using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 
 namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
@@ -23,7 +24,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             Reader storageReader = randomReader;
             Reader expectedInputReader = storageReader;
             Reader deletedReader = expectedInputReader;
-            Reader expectedReader = deletedReader;
+            Reader expectedReader = deletedReader.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectReaderByIdAsync(inputReaderId))
