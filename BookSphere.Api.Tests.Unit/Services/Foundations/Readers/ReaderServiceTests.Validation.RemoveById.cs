@@ -56,5 +56,49 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowNotFoundExceptionOnRemoveReaderByIdIsNotFoundAndLogItAsync()
+        {
+            // given
+            Guid inputReaderId = Guid.NewGuid();
+            Reader noReader = null;
+
+            var notFoundReaderException =
+                new NotFoundReaderException(inputReaderId);
+
+            var expectedReaderValidationException =
+                new ReaderValidationException(notFoundReaderException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectReaderByIdAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(noReader);
+
+            // when
+            ValueTask<Reader> removeReaderById =
+                this.readerService.RemoveReaderByIdAsync(inputReaderId);
+
+            var actualReaderValidationException =
+                await Assert.ThrowsAsync<ReaderValidationException>(
+                    removeReaderById.AsTask);
+
+            // then
+            actualReaderValidationException.Should()
+                .BeEquivalentTo(expectedReaderValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectReaderByIdAsync(It.IsAny<Guid>()), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedReaderValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.DeleteReaderAsync(It.IsAny<Reader>()), Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
