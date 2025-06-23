@@ -28,7 +28,12 @@ namespace BookSphere.Api.Services.Foundations.Books
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<Book> AddBookAsync(Book book) =>
-            await this.storageBroker.InsertBookAsync(book);
+        public ValueTask<Book> AddBookAsync(Book book) =>
+        TryCatch(async () =>
+        {
+            ValidateBookNotNull(book);
+
+            return await this.storageBroker.InsertBookAsync(book);
+        });
     }
 }
