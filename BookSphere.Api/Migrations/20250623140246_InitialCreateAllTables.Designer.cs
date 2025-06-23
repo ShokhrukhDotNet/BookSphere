@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookSphere.Api.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20250504093741_InitialCreateAllTables")]
+    [Migration("20250623140246_InitialCreateAllTables")]
     partial class InitialCreateAllTables
     {
         /// <inheritdoc />
@@ -27,7 +27,7 @@ namespace BookSphere.Api.Migrations
 
             modelBuilder.Entity("BookSphere.Api.Models.Foundations.Readers.Reader", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ReaderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -40,7 +40,7 @@ namespace BookSphere.Api.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ReaderId");
 
                     b.ToTable("Readers");
                 });

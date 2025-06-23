@@ -24,7 +24,7 @@ namespace BookSphere.Api.Migrations
 
             modelBuilder.Entity("BookSphere.Api.Models.Foundations.Readers.Reader", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ReaderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -37,7 +37,7 @@ namespace BookSphere.Api.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ReaderId");
 
                     b.ToTable("Readers");
                 });

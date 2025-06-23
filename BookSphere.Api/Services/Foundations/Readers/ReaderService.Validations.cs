@@ -16,7 +16,7 @@ namespace BookSphere.Api.Services.Foundations.Readers
             ValidateReaderNotNull(reader);
 
             Validate(
-                (Rule: IsInvalid(reader.Id), Parameter: nameof(Reader.Id)),
+                (Rule: IsInvalid(reader.ReaderId), Parameter: nameof(Reader.ReaderId)),
                 (Rule: IsInvalid(reader.FirstName), Parameter: nameof(Reader.FirstName)),
                 (Rule: IsInvalid(reader.LastName), Parameter: nameof(Reader.LastName)),
                 (Rule: IsInvalid(reader.DateOfBirth), Parameter: nameof(Reader.DateOfBirth)));
@@ -49,7 +49,7 @@ namespace BookSphere.Api.Services.Foundations.Readers
         };
 
         private static void ValidateReaderId(Guid readerId) =>
-            Validate((Rule: IsInvalid(readerId), Parameter: nameof(Reader.Id)));
+            Validate((Rule: IsInvalid(readerId), Parameter: nameof(Reader.ReaderId)));
 
         private static void ValidateStorageReader(Reader maybeReader, Guid readerId)
         {
@@ -64,7 +64,7 @@ namespace BookSphere.Api.Services.Foundations.Readers
             ValidateReaderNotNull(reader);
 
             Validate(
-                (Rule: IsInvalid(reader.Id), Parameter: nameof(Reader.Id)),
+                (Rule: IsInvalid(reader.ReaderId), Parameter: nameof(Reader.ReaderId)),
                 (Rule: IsInvalid(reader.FirstName), Parameter: nameof(Reader.FirstName)),
                 (Rule: IsInvalid(reader.LastName), Parameter: nameof(Reader.LastName)),
                 (Rule: IsInvalid(reader.DateOfBirth), Parameter: nameof(Reader.DateOfBirth)));
@@ -72,10 +72,10 @@ namespace BookSphere.Api.Services.Foundations.Readers
 
         private static void ValidateAgainstStorageReaderOnModify(Reader reader, Reader storageReader)
         {
-            ValidateStorageReader(storageReader, reader.Id);
+            ValidateStorageReader(storageReader, reader.ReaderId);
 
             Validate(
-                (Rule: IsInvalid(reader.Id), Parameter: nameof(Reader.Id)),
+                (Rule: IsInvalid(reader.ReaderId), Parameter: nameof(Reader.ReaderId)),
                 (Rule: IsInvalid(reader.FirstName), Parameter: nameof(Reader.FirstName)),
                 (Rule: IsInvalid(reader.LastName), Parameter: nameof(Reader.LastName)),
                 (Rule: IsInvalid(reader.DateOfBirth), Parameter: nameof(Reader.DateOfBirth)));

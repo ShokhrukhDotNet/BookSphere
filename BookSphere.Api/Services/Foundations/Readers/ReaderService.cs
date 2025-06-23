@@ -58,7 +58,7 @@ namespace BookSphere.Api.Services.Foundations.Readers
             ValidateReaderOnModify(reader);
 
             Reader maybeReader =
-                await this.storageBroker.SelectReaderByIdAsync(reader.Id);
+                await this.storageBroker.SelectReaderByIdAsync(reader.ReaderId);
 
             ValidateAgainstStorageReaderOnModify(reader, maybeReader);
 

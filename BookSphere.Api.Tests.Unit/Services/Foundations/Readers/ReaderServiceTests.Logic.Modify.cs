@@ -23,7 +23,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             Reader persistedReader = inputReader.DeepClone();
             Reader updatedReader = inputReader;
             Reader expectedReader = updatedReader.DeepClone();
-            Guid InputReaderId = inputReader.Id;
+            Guid InputReaderId = inputReader.ReaderId;
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectReaderByIdAsync(InputReaderId))

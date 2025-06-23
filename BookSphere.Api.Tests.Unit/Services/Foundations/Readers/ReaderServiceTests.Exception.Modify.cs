@@ -22,7 +22,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             // given
             Reader randomReader = CreateRandomReader();
             Reader someReader = randomReader;
-            Guid readerId = someReader.Id;
+            Guid readerId = someReader.ReaderId;
             SqlException sqlException = GetSqlError();
 
             var failedReaderStorageException =
@@ -67,7 +67,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             // given
             Reader randomReader = CreateRandomReader();
             Reader someReader = randomReader;
-            Guid readerId = someReader.Id;
+            Guid readerId = someReader.ReaderId;
             var databaseUpdateException = new DbUpdateException();
 
             var failedReaderStorageException =
@@ -112,7 +112,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             // given
             Reader randomReader = CreateRandomReader();
             Reader someReader = randomReader;
-            Guid readerId = someReader.Id;
+            Guid readerId = someReader.ReaderId;
             var dbUpdateConcurrencyException = new DbUpdateConcurrencyException();
 
             var lockedReaderException =
@@ -158,7 +158,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Readers
             // given
             Reader randomReader = CreateRandomReader();
             Reader someReader = randomReader;
-            Guid readerId = someReader.Id;
+            Guid readerId = someReader.ReaderId;
             Exception serviceException = new Exception();
 
             var failedReaderServiceException =
