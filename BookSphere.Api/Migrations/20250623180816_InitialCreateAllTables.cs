@@ -26,7 +26,7 @@ namespace BookSphere.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Book",
+                name: "Books",
                 columns: table => new
                 {
                     BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -37,9 +37,9 @@ namespace BookSphere.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Book", x => x.BookId);
+                    table.PrimaryKey("PK_Books", x => x.BookId);
                     table.ForeignKey(
-                        name: "FK_Book_Readers_ReaderId",
+                        name: "FK_Books_Readers_ReaderId",
                         column: x => x.ReaderId,
                         principalTable: "Readers",
                         principalColumn: "ReaderId",
@@ -47,8 +47,8 @@ namespace BookSphere.Api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Book_ReaderId",
-                table: "Book",
+                name: "IX_Books_ReaderId",
+                table: "Books",
                 column: "ReaderId");
         }
 
@@ -56,7 +56,7 @@ namespace BookSphere.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Book");
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Readers");
