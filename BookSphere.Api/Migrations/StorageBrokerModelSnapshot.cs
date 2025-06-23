@@ -44,7 +44,7 @@ namespace BookSphere.Api.Migrations
 
                     b.HasIndex("ReaderId");
 
-                    b.ToTable("Book");
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("BookSphere.Api.Models.Foundations.Readers.Reader", b =>
