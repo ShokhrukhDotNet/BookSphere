@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Models.Foundations.Books.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace BookSphere.Api.Services.Foundations.Books
@@ -19,7 +20,7 @@ namespace BookSphere.Api.Services.Foundations.Books
             try
             {
                 return await returningBookFunction();
-    }
+            }
             catch (NullBookException nullBookException)
             {
                 throw CreateAndLogValidationException(nullBookException);
@@ -27,6 +28,12 @@ namespace BookSphere.Api.Services.Foundations.Books
             catch (InvalidBookException invalidBookException)
             {
                 throw CreateAndLogValidationException(invalidBookException);
+            }
+            catch (SqlException sqlException)
+            {
+                var failedBookStorageException = new FailedBookStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedBookStorageException);
             }
         }
 
@@ -38,6 +45,14 @@ namespace BookSphere.Api.Services.Foundations.Books
             this.loggingBroker.LogError(bookValidationException);
 
             return bookValidationException;
+        }
+
+        private BookDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var bookDependencyException = new BookDependencyException(exception);
+            this.loggingBroker.LogCritical(bookDependencyException);
+
+            return bookDependencyException;
         }
     }
 }
