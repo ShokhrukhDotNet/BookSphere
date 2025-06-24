@@ -3,6 +3,7 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Models.Foundations.Books.Exceptions;
@@ -43,6 +44,13 @@ namespace BookSphere.Api.Services.Foundations.Books
 
                 throw CreateAndLogDependencyValidationException(alreadyExistBookException);
             }
+            catch (Exception exception)
+            {
+                var failedBookServiceException =
+                    new FailedBookServiceException(exception);
+
+                throw CreateAndLogServiceException(failedBookServiceException);
+            }
         }
 
         private BookValidationException CreateAndLogValidationException(Xeption exception)
@@ -72,6 +80,14 @@ namespace BookSphere.Api.Services.Foundations.Books
             this.loggingBroker.LogError(bookDependencyValidationException);
 
             return bookDependencyValidationException;
+        }
+
+        private BookServiceException CreateAndLogServiceException(Xeption exception)
+        {
+            var bookServiceException = new BookServiceException(exception);
+            this.loggingBroker.LogError(bookServiceException);
+
+            return bookServiceException;
         }
     }
 }
