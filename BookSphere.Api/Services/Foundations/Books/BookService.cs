@@ -31,7 +31,7 @@ namespace BookSphere.Api.Services.Foundations.Books
         public ValueTask<Book> AddBookAsync(Book book) =>
         TryCatch(async () =>
         {
-            ValidateBookNotNull(book);
+            ValidateBookOnAdd(book);
 
             return await this.storageBroker.InsertBookAsync(book);
         });

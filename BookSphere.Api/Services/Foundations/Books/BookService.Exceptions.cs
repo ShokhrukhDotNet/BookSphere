@@ -23,7 +23,11 @@ namespace BookSphere.Api.Services.Foundations.Books
             catch (NullBookException nullBookException)
             {
                 throw CreateAndLogValidationException(nullBookException);
-}
+            }
+            catch (InvalidBookException invalidBookException)
+            {
+                throw CreateAndLogValidationException(invalidBookException);
+            }
         }
 
         private BookValidationException CreateAndLogValidationException(Xeption exception)
