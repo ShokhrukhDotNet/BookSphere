@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Models.Foundations.Books.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Xeptions;
 
@@ -35,6 +36,13 @@ namespace BookSphere.Api.Services.Foundations.Books
 
                 throw CreateAndLogCriticalDependencyException(failedBookStorageException);
             }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistBookException =
+                    new AlreadyExistBookException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistBookException);
+            }
         }
 
         private BookValidationException CreateAndLogValidationException(Xeption exception)
@@ -53,6 +61,17 @@ namespace BookSphere.Api.Services.Foundations.Books
             this.loggingBroker.LogCritical(bookDependencyException);
 
             return bookDependencyException;
+        }
+
+        private BookDependencyValidationException CreateAndLogDependencyValidationException(
+            Xeption exception)
+        {
+            var bookDependencyValidationException =
+                new BookDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(bookDependencyValidationException);
+
+            return bookDependencyValidationException;
         }
     }
 }
