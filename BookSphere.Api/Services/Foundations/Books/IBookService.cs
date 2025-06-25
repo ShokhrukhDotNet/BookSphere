@@ -3,6 +3,7 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Books;
@@ -13,5 +14,6 @@ namespace BookSphere.Api.Services.Foundations.Books
     {
         ValueTask<Book> AddBookAsync(Book book);
         IQueryable<Book> RetrieveAllBooks();
+        ValueTask<Book> RetrieveBookByIdAsync(Guid bookId);
     }
 }
