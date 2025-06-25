@@ -15,5 +15,6 @@ namespace BookSphere.Api.Services.Foundations.Books
         ValueTask<Book> AddBookAsync(Book book);
         IQueryable<Book> RetrieveAllBooks();
         ValueTask<Book> RetrieveBookByIdAsync(Guid bookId);
+        ValueTask<Book> ModifyBookAsync(Book book);
     }
 }
