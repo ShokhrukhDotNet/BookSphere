@@ -38,6 +38,6 @@ namespace BookSphere.Api.Services.Foundations.Books
         });
 
         public IQueryable<Book> RetrieveAllBooks() =>
-            this.storageBroker.SelectAllBooks();
+            TryCatch(() => this.storageBroker.SelectAllBooks());
     }
 }

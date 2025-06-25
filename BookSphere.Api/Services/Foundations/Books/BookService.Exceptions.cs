@@ -4,6 +4,7 @@
 //==================================================
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Models.Foundations.Books.Exceptions;
@@ -16,6 +17,7 @@ namespace BookSphere.Api.Services.Foundations.Books
     public partial class BookService
     {
         private delegate ValueTask<Book> ReturningBookFunction();
+        private delegate IQueryable<Book> ReturningBooksFunction();
 
         private async ValueTask<Book> TryCatch(ReturningBookFunction returningBookFunction)
         {
@@ -50,6 +52,21 @@ namespace BookSphere.Api.Services.Foundations.Books
                     new FailedBookServiceException(exception);
 
                 throw CreateAndLogServiceException(failedBookServiceException);
+            }
+        }
+
+        private IQueryable<Book> TryCatch(ReturningBooksFunction returningBooksFunction)
+        {
+            try
+            {
+                return returningBooksFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedBookStorageException =
+                    new FailedBookStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedBookStorageException);
             }
         }
 
