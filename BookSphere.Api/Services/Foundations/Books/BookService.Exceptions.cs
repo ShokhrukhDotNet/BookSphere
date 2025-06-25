@@ -68,6 +68,13 @@ namespace BookSphere.Api.Services.Foundations.Books
 
                 throw CreateAndLogCriticalDependencyException(failedBookStorageException);
             }
+            catch (Exception exception)
+            {
+                var failedBookServiceException =
+                    new FailedBookServiceException(exception);
+
+                throw CreateAndLogServiceException(failedBookServiceException);
+            }
         }
 
         private BookValidationException CreateAndLogValidationException(Xeption exception)
