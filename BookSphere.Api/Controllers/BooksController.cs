@@ -3,6 +3,8 @@
 // Free To Use To Bridge Knowledge and Curiosity
 //==================================================
 
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Models.Foundations.Books.Exceptions;
@@ -44,6 +46,52 @@ namespace BookSphere.Api.Controllers
             catch (BookDependencyValidationException bookDependencyValidationException)
             {
                 return BadRequest(bookDependencyValidationException.InnerException);
+            }
+            catch (BookDependencyException bookDependencyException)
+            {
+                return InternalServerError(bookDependencyException.InnerException);
+            }
+            catch (BookServiceException bookServiceException)
+            {
+                return InternalServerError(bookServiceException.InnerException);
+            }
+        }
+
+        [HttpGet("ById")]
+        public async ValueTask<ActionResult<Book>> GetBookByIdAsync(Guid bookId)
+        {
+            try
+            {
+                return await this.bookService.RetrieveBookByIdAsync(bookId);
+            }
+            catch (BookDependencyException bookDependencyException)
+            {
+                return InternalServerError(bookDependencyException.InnerException);
+            }
+            catch (BookValidationException bookValidationException)
+                when (bookValidationException.InnerException is InvalidBookException)
+            {
+                return BadRequest(bookValidationException.InnerException);
+            }
+            catch (BookValidationException bookValidationException)
+                when (bookValidationException.InnerException is NotFoundBookException)
+            {
+                return NotFound(bookValidationException.InnerException);
+            }
+            catch (BookServiceException bookServiceException)
+            {
+                return InternalServerError(bookServiceException.InnerException);
+            }
+        }
+
+        [HttpGet("All")]
+        public ActionResult<IQueryable<Book>> GetAllBooks()
+        {
+            try
+            {
+                IQueryable<Book> allBooks = this.bookService.RetrieveAllBooks();
+
+                return Ok(allBooks);
             }
             catch (BookDependencyException bookDependencyException)
             {
