@@ -33,12 +33,12 @@ namespace BookSphere.Api.Services.Foundations.Books
             {
                 throw CreateAndLogValidationException(invalidBookException);
             }
-            //catch (SqlException sqlException)
-            //{
-            //    var failedBookStorageException = new FailedBookStorageException(sqlException);
+            catch (SqlException sqlException)
+            {
+                var failedBookStorageException = new FailedBookStorageException(sqlException);
 
-            //    throw CreateAndLogCriticalDependencyException(failedBookStorageException);
-            //}
+                throw CreateAndLogCriticalDependencyException(failedBookStorageException);
+            }
             catch (NotFoundBookException notFoundBookException)
             {
                 throw CreateAndLogValidationException(notFoundBookException);
