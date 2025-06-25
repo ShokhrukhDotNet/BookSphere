@@ -37,8 +37,13 @@ namespace BookSphere.Api.Services.Foundations.Books
             return await this.storageBroker.InsertBookAsync(book);
         });
 
-        public async ValueTask<Book> RetrieveBookByIdAsync(Guid bookId) =>
-            await this.storageBroker.SelectBookByIdAsync(bookId);
+        public ValueTask<Book> RetrieveBookByIdAsync(Guid bookId) =>
+        TryCatch(async () =>
+        {
+            ValidateBookId(bookId);
+
+            return await this.storageBroker.SelectBookByIdAsync(bookId);
+        });
 
         public IQueryable<Book> RetrieveAllBooks() =>
             TryCatch(() => this.storageBroker.SelectAllBooks());

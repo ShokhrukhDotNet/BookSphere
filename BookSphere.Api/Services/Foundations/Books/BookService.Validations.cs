@@ -43,6 +43,9 @@ namespace BookSphere.Api.Services.Foundations.Books
             Message = "Text is required"
         };
 
+        private static void ValidateBookId(Guid bookId) =>
+            Validate((Rule: IsInvalid(bookId), Parameter: nameof(Book.BookId)));
+
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidBookException = new InvalidBookException();
