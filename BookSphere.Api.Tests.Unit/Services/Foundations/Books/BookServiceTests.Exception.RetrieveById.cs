@@ -55,5 +55,45 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Books
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnRetrieveByIdAsyncIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Guid someId = Guid.NewGuid();
+            Exception serverException = new Exception();
+
+            var failedBookServiceException =
+                new FailedBookServiceException(serverException);
+
+            BookServiceException expectedBookServiceException =
+                new BookServiceException(failedBookServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectBookByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(serverException);
+
+            // when
+            ValueTask<Book> retrieveBookById =
+                this.bookService.RetrieveBookByIdAsync(someId);
+
+            BookServiceException actualBookServiceException =
+                await Assert.ThrowsAsync<BookServiceException>(
+                    retrieveBookById.AsTask);
+
+            // then
+            actualBookServiceException.Should().BeEquivalentTo(expectedBookServiceException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectBookByIdAsync(someId), Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedBookServiceException))), Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
