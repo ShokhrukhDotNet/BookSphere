@@ -42,7 +42,11 @@ namespace BookSphere.Api.Services.Foundations.Books
         {
             ValidateBookId(bookId);
 
-            return await this.storageBroker.SelectBookByIdAsync(bookId);
+            Book maybeBook = await this.storageBroker.SelectBookByIdAsync(bookId);
+
+            ValidateStorageBook(maybeBook, bookId);
+
+            return maybeBook;
         });
 
         public IQueryable<Book> RetrieveAllBooks() =>

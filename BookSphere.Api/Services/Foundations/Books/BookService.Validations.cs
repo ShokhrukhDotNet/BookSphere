@@ -46,6 +46,14 @@ namespace BookSphere.Api.Services.Foundations.Books
         private static void ValidateBookId(Guid bookId) =>
             Validate((Rule: IsInvalid(bookId), Parameter: nameof(Book.BookId)));
 
+        private static void ValidateStorageBook(Book maybeBook, Guid bookId)
+        {
+            if (maybeBook is null)
+            {
+                throw new NotFoundBookException(bookId);
+            }
+        }
+
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidBookException = new InvalidBookException();

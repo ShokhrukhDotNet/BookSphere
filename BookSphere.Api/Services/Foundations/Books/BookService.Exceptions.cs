@@ -39,6 +39,10 @@ namespace BookSphere.Api.Services.Foundations.Books
 
                 throw CreateAndLogCriticalDependencyException(failedBookStorageException);
             }
+            catch (NotFoundBookException notFoundBookException)
+            {
+                throw CreateAndLogValidationException(notFoundBookException);
+            }
             catch (DuplicateKeyException duplicateKeyException)
             {
                 var alreadyExistBookException =
