@@ -15,5 +15,6 @@ namespace BookSphere.Api.Brokers.Storages
         ValueTask<Book> InsertBookAsync(Book book);
         IQueryable<Book> SelectAllBooks();
         ValueTask<Book> SelectBookByIdAsync(Guid bookId);
+        ValueTask<Book> UpdateBookAsync(Book book);
     }
 }
