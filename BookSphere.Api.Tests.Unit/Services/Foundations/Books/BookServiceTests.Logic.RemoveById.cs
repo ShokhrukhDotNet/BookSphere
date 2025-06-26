@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Books;
 using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 
 namespace BookSphere.Api.Tests.Unit.Services.Foundations.Books
@@ -23,7 +24,7 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Books
             Book storageBook = randomBook;
             Book expectedInputBook = storageBook;
             Book deletedBook = expectedInputBook;
-            Book expectedBook = deletedBook;
+            Book expectedBook = deletedBook.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectBookByIdAsync(inputBookId))
