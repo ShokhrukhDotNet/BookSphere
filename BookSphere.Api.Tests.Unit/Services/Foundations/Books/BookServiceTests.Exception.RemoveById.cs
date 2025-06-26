@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Models.Foundations.Books.Exceptions;
 using FluentAssertions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
@@ -53,6 +54,49 @@ namespace BookSphere.Api.Tests.Unit.Services.Foundations.Books
 
             this.storageBrokerMock.Verify(broker =>
                 broker.DeleteBookAsync(It.IsAny<Book>()), Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyExceptionOnRemoveWhenSqlExceptionOccursAndLogItAsync()
+        {
+            // given
+            Guid someLocationId = Guid.NewGuid();
+            SqlException sqlException = GetSqlError();
+
+            var failedBookStorageException =
+                new FailedBookStorageException(sqlException);
+
+            var expectedBookDependencyException =
+                new BookDependencyException(failedBookStorageException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectBookByIdAsync(It.IsAny<Guid>()))
+                    .ThrowsAsync(sqlException);
+
+            // when
+            ValueTask<Book> deleteBookTask =
+                this.bookService.RemoveBookByIdAsync(someLocationId);
+
+            var actualBookDependencyException =
+                await Assert.ThrowsAsync<BookDependencyException>(
+                    deleteBookTask.AsTask);
+
+            // then
+            actualBookDependencyException.Should()
+                .BeEquivalentTo(expectedBookDependencyException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectBookByIdAsync(It.IsAny<Guid>()),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogCritical(It.Is(SameExceptionAs(
+                    expectedBookDependencyException))),
+                        Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
