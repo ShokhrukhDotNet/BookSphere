@@ -63,13 +63,13 @@ namespace BookSphere.Api.Services.Foundations.Books
 
                 throw CreateAndLogDependencyValidationException(alreadyExistBookException);
             }
-            //catch (Exception exception)
-            //{
-            //    var failedBookServiceException =
-            //        new FailedBookServiceException(exception);
+            catch (Exception exception)
+            {
+                var failedBookServiceException =
+                    new FailedBookServiceException(exception);
 
-            //    throw CreateAndLogServiceException(failedBookServiceException);
-            //}
+                throw CreateAndLogServiceException(failedBookServiceException);
+            }
         }
 
         private IQueryable<Book> TryCatch(ReturningBooksFunction returningBooksFunction)
