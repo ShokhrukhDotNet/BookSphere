@@ -60,6 +60,8 @@ namespace BookSphere.Api.Services.Foundations.Books
             Book maybeBook =
                 await this.storageBroker.SelectBookByIdAsync(book.BookId);
 
+            ValidateAgainstStorageBookOnModify(book, maybeBook);
+
             return await this.storageBroker.UpdateBookAsync(book);
         });
     }
