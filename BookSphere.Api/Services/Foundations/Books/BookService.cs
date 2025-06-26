@@ -64,5 +64,8 @@ namespace BookSphere.Api.Services.Foundations.Books
 
             return await this.storageBroker.UpdateBookAsync(book);
         });
+
+        public async ValueTask<Book> RemoveBookByIdAsync(Guid bookId) =>
+            throw new NotImplementedException();
     }
 }
