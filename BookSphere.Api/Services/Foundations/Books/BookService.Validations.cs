@@ -54,6 +54,30 @@ namespace BookSphere.Api.Services.Foundations.Books
             }
         }
 
+        private static void ValidateBookOnModify(Book book)
+        {
+            ValidateBookNotNull(book);
+
+            Validate(
+                (Rule: IsInvalid(book.BookId), Parameter: nameof(Book.BookId)),
+                (Rule: IsInvalid(book.BookTitle), Parameter: nameof(Book.BookTitle)),
+                (Rule: IsInvalid(book.Author), Parameter: nameof(Book.Author)),
+                (Rule: IsInvalid(book.Genre), Parameter: nameof(Book.Genre)),
+                (Rule: IsInvalid(book.ReaderId), Parameter: nameof(Book.ReaderId)));
+        }
+
+        private static void ValidateAgainstStorageBookOnModify(Book book, Book storageBook)
+        {
+            ValidateStorageBook(storageBook, book.BookId);
+
+            Validate(
+                (Rule: IsInvalid(book.BookId), Parameter: nameof(Book.BookId)),
+                (Rule: IsInvalid(book.BookTitle), Parameter: nameof(Book.BookTitle)),
+                (Rule: IsInvalid(book.Author), Parameter: nameof(Book.Author)),
+                (Rule: IsInvalid(book.Genre), Parameter: nameof(Book.Genre)),
+                (Rule: IsInvalid(book.ReaderId), Parameter: nameof(Book.ReaderId)));
+        }
+
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidBookException = new InvalidBookException();
