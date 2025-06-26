@@ -44,12 +44,12 @@ namespace BookSphere.Api.Services.Foundations.Books
             {
                 throw CreateAndLogValidationException(notFoundBookException);
             }
-            //catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
-            //{
-            //    var lockedBookException = new LockedBookException(dbUpdateConcurrencyException);
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedBookException = new LockedBookException(dbUpdateConcurrencyException);
 
-            //    throw CreateAndLogDependencyValidationException(lockedBookException);
-            //}
+                throw CreateAndLogDependencyValidationException(lockedBookException);
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedBookStorageException = new FailedBookStorageException(dbUpdateException);
