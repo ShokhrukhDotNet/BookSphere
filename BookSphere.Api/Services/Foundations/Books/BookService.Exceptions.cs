@@ -10,6 +10,7 @@ using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Models.Foundations.Books.Exceptions;
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Xeptions;
 
 namespace BookSphere.Api.Services.Foundations.Books
@@ -42,6 +43,12 @@ namespace BookSphere.Api.Services.Foundations.Books
             catch (NotFoundBookException notFoundBookException)
             {
                 throw CreateAndLogValidationException(notFoundBookException);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedBookStorageException = new FailedBookStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedBookStorageException);
             }
             catch (DuplicateKeyException duplicateKeyException)
             {
@@ -108,6 +115,14 @@ namespace BookSphere.Api.Services.Foundations.Books
             this.loggingBroker.LogError(bookDependencyValidationException);
 
             return bookDependencyValidationException;
+        }
+
+        private BookDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var bookDependencyException = new BookDependencyException(exception);
+            this.loggingBroker.LogError(bookDependencyException);
+
+            return bookDependencyException;
         }
 
         private BookServiceException CreateAndLogServiceException(Xeption exception)
