@@ -55,7 +55,7 @@ namespace BookSphere.Api.Services.Foundations.Books
         public ValueTask<Book> ModifyBookAsync(Book book) =>
         TryCatch(async () =>
         {
-            ValidateBookNotNull(book);
+            ValidateBookOnModify(book);
 
             Book maybeBook =
                 await this.storageBroker.SelectBookByIdAsync(book.BookId);
