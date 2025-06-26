@@ -25,5 +25,8 @@ namespace BookSphere.Api.Brokers.Storages
 
         public async ValueTask<Book> UpdateBookAsync(Book book) =>
             await UpdateAsync(book);
+
+        public async ValueTask<Book> DeleteBookAsync(Book book) =>
+            await DeleteAsync(book);
     }
 }
