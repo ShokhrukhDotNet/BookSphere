@@ -12,5 +12,9 @@ namespace BookSphere.Api.Models.Foundations.Readers.Exceptions
         public InvalidReaderException()
             : base(message: "Reader is invalid")
         { }
+
+        public InvalidReaderException(string parameterName, object parameterValue)
+            : base(message: $"Invalid Reader: Parameter '{parameterName}' is invalid, value: '{parameterValue}'.")
+        { }
     }
 }
