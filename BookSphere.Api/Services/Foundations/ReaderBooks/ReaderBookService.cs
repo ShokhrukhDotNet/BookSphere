@@ -36,10 +36,7 @@ namespace BookSphere.Api.Services.Foundations.ReaderBooks
         {
             ValidateReaderId(readerId);
 
-            Reader maybeReader =
-                await this.storageBroker.Readers
-                    .Include(reader => reader.Books)
-                    .FirstOrDefaultAsync(reader => reader.ReaderId == readerId);
+            Reader maybeReader = await this.storageBroker.SelectReaderByIdAsync(readerId);
 
             ValidateStorageReader(maybeReader, readerId);
 
