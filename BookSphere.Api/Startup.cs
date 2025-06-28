@@ -7,6 +7,7 @@ using BookSphere.Api.Brokers.DateTimes;
 using BookSphere.Api.Brokers.Loggings;
 using BookSphere.Api.Brokers.Storages;
 using BookSphere.Api.Services.Foundations.Books;
+using BookSphere.Api.Services.Foundations.ReaderBooks;
 using BookSphere.Api.Services.Foundations.Readers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,6 +57,7 @@ namespace BookSphere.Api
         {
             services.AddTransient<IReaderService, ReaderService>();
             services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IReaderBookService, ReaderBookService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
