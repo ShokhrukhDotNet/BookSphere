@@ -9,6 +9,8 @@ using BookSphere.Api.Brokers.Storages;
 using BookSphere.Api.Services.Foundations.Books;
 using BookSphere.Api.Services.Foundations.ReaderBooks;
 using BookSphere.Api.Services.Foundations.Readers;
+using BookSphere.Api.Services.Processings.Books;
+using BookSphere.Api.Services.Processings.Readers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +39,7 @@ namespace BookSphere.Api
             services.AddDbContext<StorageBroker>();
             AddBrokers(services);
             AddFoundationServices(services);
+            AddProcessingServices(services);
 
             services.AddSwaggerGen(options =>
             {
@@ -58,6 +61,12 @@ namespace BookSphere.Api
             services.AddTransient<IReaderService, ReaderService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IReaderBookService, ReaderBookService>();
+        }
+
+        private static void AddProcessingServices(IServiceCollection services)
+        {
+            services.AddTransient<IReaderProcessingService, ReaderProcessingService>();
+            services.AddTransient<IBookProcessingService, BookProcessingService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)

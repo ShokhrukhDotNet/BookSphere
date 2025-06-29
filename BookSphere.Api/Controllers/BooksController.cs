@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Models.Foundations.Books.Exceptions;
-using BookSphere.Api.Services.Foundations.Books;
+using BookSphere.Api.Services.Processings.Books;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -18,11 +18,11 @@ namespace BookSphere.Api.Controllers
     [Route("api/[controller]")]
     public class BooksController : RESTFulController
     {
-        private readonly IBookService bookService;
+        private readonly IBookProcessingService bookProcessingService;
 
-        public BooksController(IBookService bookService)
+        public BooksController(IBookProcessingService bookProcessingService)
         {
-            this.bookService = bookService;
+            this.bookProcessingService = bookProcessingService;
         }
 
         [HttpPost]
@@ -30,7 +30,7 @@ namespace BookSphere.Api.Controllers
         {
             try
             {
-                Book postedBook = await this.bookService.AddBookAsync(book);
+                Book postedBook = await this.bookProcessingService.RegisterAndSaveBookAsync(book);
 
                 return Created(postedBook);
             }
@@ -62,7 +62,7 @@ namespace BookSphere.Api.Controllers
         {
             try
             {
-                return await this.bookService.RetrieveBookByIdAsync(bookId);
+                return await this.bookProcessingService.RetrieveBookByIdAsync(bookId);
             }
             catch (BookDependencyException bookDependencyException)
             {
@@ -89,7 +89,7 @@ namespace BookSphere.Api.Controllers
         {
             try
             {
-                IQueryable<Book> allBooks = this.bookService.RetrieveAllBooks();
+                IQueryable<Book> allBooks = this.bookProcessingService.RetrieveAllBooks();
 
                 return Ok(allBooks);
             }
@@ -109,7 +109,7 @@ namespace BookSphere.Api.Controllers
             try
             {
                 Book modifyBook =
-                    await this.bookService.ModifyBookAsync(book);
+                    await this.bookProcessingService.ModifyBookAsync(book);
 
                 return Ok(modifyBook);
             }
@@ -141,7 +141,7 @@ namespace BookSphere.Api.Controllers
         {
             try
             {
-                Book deleteBook = await this.bookService.RemoveBookByIdAsync(bookId);
+                Book deleteBook = await this.bookProcessingService.RemoveBookByIdAsync(bookId);
 
                 return Ok(deleteBook);
             }

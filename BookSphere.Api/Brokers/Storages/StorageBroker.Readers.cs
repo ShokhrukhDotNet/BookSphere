@@ -18,10 +18,30 @@ namespace BookSphere.Api.Brokers.Storages
         public async ValueTask<Reader> InsertReaderAsync(Reader reader) =>
             await InsertAsync(reader);
 
-        public IQueryable<Reader> SelectAllReaders() => SelectAll<Reader>();
+        public IQueryable<Reader> SelectAllReaders()
+        {
+            var readers = SelectAll<Reader>().Include(a => a.Books);
 
-        public async ValueTask<Reader> SelectReaderByIdAsync(Guid readerId) =>
-            await SelectAsync<Reader>(readerId);
+            return readers;
+        }
+
+        public async ValueTask<Reader> SelectReaderByIdAsync(Guid readerId)
+        {
+            var readerWithBooks = Readers
+                .Include(c => c.Books)
+                .FirstOrDefault(c => c.ReaderId == readerId);
+
+            return await ValueTask.FromResult(readerWithBooks);
+        }
+
+        public IQueryable<Reader> SelectAllReadersWithBooks() =>
+            this.Readers.Include(reader => reader.Books);
+
+        public async ValueTask<Reader> SelectReaderWithBooksByIdAsync(Guid readerId) =>
+            await this.Readers
+                .Include(reader => reader.Books)
+                .FirstOrDefaultAsync(reader => reader.ReaderId == readerId);
+
 
         public async ValueTask<Reader> UpdateReaderAsync(Reader reader) =>
             await UpdateAsync(reader);
