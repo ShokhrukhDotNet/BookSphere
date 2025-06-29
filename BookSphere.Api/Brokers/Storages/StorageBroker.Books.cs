@@ -27,11 +27,11 @@ namespace BookSphere.Api.Brokers.Storages
 
         public async ValueTask<Book> SelectBookByIdAsync(Guid bookId)
         {
-            var readertWithBooks = Books
+            var readerWithBooks = Books
             .Include(a => a.Reader)
                 .FirstOrDefault(a => a.BookId == bookId);
 
-            return await ValueTask.FromResult(readertWithBooks);
+            return await ValueTask.FromResult(readerWithBooks);
         }
 
         public async ValueTask<Book> UpdateBookAsync(Book book) =>
