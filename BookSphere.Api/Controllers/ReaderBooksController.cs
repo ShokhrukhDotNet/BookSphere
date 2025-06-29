@@ -8,8 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.ReaderBooks;
 using BookSphere.Api.Models.Foundations.ReaderBooks.Exceptions;
-using BookSphere.Api.Services.Foundations.ReaderBooks;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
+using BookSphere.Api.Services.Foundations.ReaderBooks;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 

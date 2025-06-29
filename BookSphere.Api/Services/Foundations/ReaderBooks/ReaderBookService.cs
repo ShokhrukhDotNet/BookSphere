@@ -11,7 +11,6 @@ using BookSphere.Api.Brokers.Loggings;
 using BookSphere.Api.Brokers.Storages;
 using BookSphere.Api.Models.Foundations.ReaderBooks;
 using BookSphere.Api.Models.Foundations.Readers;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookSphere.Api.Services.Foundations.ReaderBooks
 {
