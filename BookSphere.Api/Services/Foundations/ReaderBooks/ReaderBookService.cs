@@ -36,7 +36,8 @@ namespace BookSphere.Api.Services.Foundations.ReaderBooks
         {
             ValidateReaderId(readerId);
 
-            Reader maybeReader = await this.storageBroker.SelectReaderByIdAsync(readerId);
+            Reader maybeReader = await this.storageBroker
+                .SelectReaderWithBooksByIdAsync(readerId);
 
             ValidateStorageReader(maybeReader, readerId);
 
@@ -48,8 +49,8 @@ namespace BookSphere.Api.Services.Foundations.ReaderBooks
         });
 
         public IQueryable<ReaderBook> RetrieveAllReaderBooks() =>
-            TryCatch(() => this.storageBroker.SelectAllReaders()
-                .Include(reader => reader.Books)
+            TryCatch(() =>
+                this.storageBroker.SelectAllReadersWithBooks()
                     .Select(reader => new ReaderBook
                     {
                         Reader = reader,

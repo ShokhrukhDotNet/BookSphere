@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookSphere.Api.Models.Foundations.Readers;
 using BookSphere.Api.Models.Foundations.Readers.Exceptions;
-using BookSphere.Api.Services.Foundations.Readers;
+using BookSphere.Api.Services.Processings.Readers;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -18,11 +18,11 @@ namespace BookSphere.Api.Controllers
     [Route("api/[controller]")]
     public class ReadersController : RESTFulController
     {
-        private readonly IReaderService readerService;
+        private readonly IReaderProcessingService readerProcessingService;
 
-        public ReadersController(IReaderService readerService)
+        public ReadersController(IReaderProcessingService readerProcessingService)
         {
-            this.readerService = readerService;
+            this.readerProcessingService = readerProcessingService;
         }
 
         [HttpPost]
@@ -30,7 +30,7 @@ namespace BookSphere.Api.Controllers
         {
             try
             {
-                Reader postedReader = await this.readerService.AddReaderAsync(reader);
+                Reader postedReader = await this.readerProcessingService.RegisterReaderWithBooksAsync(reader);
 
                 return Created(postedReader);
             }
@@ -62,7 +62,7 @@ namespace BookSphere.Api.Controllers
         {
             try
             {
-                return await this.readerService.RetrieveReaderByIdAsync(readerId);
+                return await this.readerProcessingService.RetrieveReaderByIdAsync(readerId);
             }
             catch (ReaderDependencyException readerDependencyException)
             {
@@ -89,7 +89,7 @@ namespace BookSphere.Api.Controllers
         {
             try
             {
-                IQueryable<Reader> allReaders = this.readerService.RetrieveAllReaders();
+                IQueryable<Reader> allReaders = this.readerProcessingService.RetrieveAllReaders();
 
                 return Ok(allReaders);
             }
@@ -109,7 +109,7 @@ namespace BookSphere.Api.Controllers
             try
             {
                 Reader modifyReader =
-                    await this.readerService.ModifyReaderAsync(reader);
+                    await this.readerProcessingService.ModifyReaderAsync(reader);
 
                 return Ok(modifyReader);
             }
@@ -141,7 +141,7 @@ namespace BookSphere.Api.Controllers
         {
             try
             {
-                Reader deleteReader = await this.readerService.RemoveReaderByIdAsync(readerId);
+                Reader deleteReader = await this.readerProcessingService.RemoveReaderByIdAsync(readerId);
 
                 return Ok(deleteReader);
             }
