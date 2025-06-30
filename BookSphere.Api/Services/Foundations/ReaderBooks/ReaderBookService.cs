@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BookSphere.Api.Brokers.DateTimes;
 using BookSphere.Api.Brokers.Loggings;
 using BookSphere.Api.Brokers.Storages;
+using BookSphere.Api.Models.Foundations.Books;
 using BookSphere.Api.Models.Foundations.ReaderBooks;
 using BookSphere.Api.Models.Foundations.Readers;
 
@@ -40,10 +41,19 @@ namespace BookSphere.Api.Services.Foundations.ReaderBooks
 
             ValidateStorageReader(maybeReader, readerId);
 
+            var cleanBooks = maybeReader.Books.Select(book => new Book
+            {
+                BookId = book.BookId,
+                BookTitle = book.BookTitle,
+                Author = book.Author,
+                Genre = book.Genre,
+                Reader = null
+            }).ToList();
+
             return new ReaderBook
             {
                 Reader = maybeReader,
-                Books = maybeReader.Books
+                Books = cleanBooks
             };
         });
 
@@ -53,7 +63,14 @@ namespace BookSphere.Api.Services.Foundations.ReaderBooks
                     .Select(reader => new ReaderBook
                     {
                         Reader = reader,
-                        Books = reader.Books
+                        Books = reader.Books.Select(book => new Book
+                        {
+                            BookId = book.BookId,
+                            BookTitle = book.BookTitle,
+                            Author = book.Author,
+                            Genre = book.Genre,
+                            Reader = null
+                        }).ToList()
                     }));
     }
 }
