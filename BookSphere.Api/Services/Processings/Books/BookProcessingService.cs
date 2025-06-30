@@ -24,6 +24,7 @@ namespace BookSphere.Api.Services.Processings.Books
         {
             book.BookId = Guid.NewGuid();
             book.ReaderId = book.Reader?.ReaderId ?? book.ReaderId;
+
             return await this.bookService.AddBookAsync(book);
         }
 
@@ -35,9 +36,7 @@ namespace BookSphere.Api.Services.Processings.Books
 
         public async ValueTask<Book> ModifyBookAsync(Book book)
         {
-            var maybeBook = await this.bookService.RetrieveBookByIdAsync(book.BookId);
-
-            var updatedBook = CreateBook(book, maybeBook);
+            var updatedBook = CreateBook(book);
 
             return await this.bookService.ModifyBookAsync(updatedBook);
         }
@@ -45,7 +44,7 @@ namespace BookSphere.Api.Services.Processings.Books
         public async ValueTask<Book> RemoveBookByIdAsync(Guid bookId) =>
             await this.bookService.RemoveBookByIdAsync(bookId);
 
-        private static Book CreateBook(Book inputBook, Book maybeBook)
+        private static Book CreateBook(Book inputBook)
         {
             return new Book
             {
