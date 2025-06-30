@@ -22,14 +22,9 @@ namespace BookSphere.Api.Services.Processings.Books
 
         public async ValueTask<Book> RegisterAndSaveBookAsync(Book book)
         {
-            var maybeBook = await this.bookService
-                .RetrieveBookByIdAsync(book.BookId);
-
-            var updatedBook = CreateBook(book, maybeBook);
-
-            await this.bookService.ModifyBookAsync(updatedBook);
-
-            return updatedBook;
+            book.BookId = Guid.NewGuid();
+            book.ReaderId = book.Reader?.ReaderId ?? book.ReaderId;
+            return await this.bookService.AddBookAsync(book);
         }
 
         public async ValueTask<Book> RetrieveBookByIdAsync(Guid bookId) =>
@@ -52,11 +47,9 @@ namespace BookSphere.Api.Services.Processings.Books
 
         private static Book CreateBook(Book inputBook, Book maybeBook)
         {
-            var bookId = maybeBook?.BookId ?? Guid.NewGuid();
-
             return new Book
             {
-                BookId = bookId,
+                BookId = inputBook.BookId,
                 BookTitle = inputBook.BookTitle,
                 Author = inputBook.Author,
                 Genre = inputBook.Genre,

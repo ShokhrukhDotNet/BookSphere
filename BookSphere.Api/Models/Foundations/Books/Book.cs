@@ -17,6 +17,7 @@ namespace BookSphere.Api.Models.Foundations.Books
         public string Genre { get; set; }
         [JsonIgnore]
         public Guid ReaderId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Reader Reader { get; set; }
     }
 }
