@@ -21,10 +21,8 @@ namespace BookSphere.Api.Controllers
     {
         private readonly IReaderBookService readerBookService;
 
-        public ReaderBooksController(IReaderBookService readerBookService)
-        {
+        public ReaderBooksController(IReaderBookService readerBookService) =>
             this.readerBookService = readerBookService;
-        }
 
         [HttpGet("readerId")]
         public async ValueTask<ActionResult<ReaderBook>> GetReaderBookByIdAsync(Guid readerId)
