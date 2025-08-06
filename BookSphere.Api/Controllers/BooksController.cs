@@ -20,10 +20,8 @@ namespace BookSphere.Api.Controllers
     {
         private readonly IBookProcessingService bookProcessingService;
 
-        public BooksController(IBookProcessingService bookProcessingService)
-        {
+        public BooksController(IBookProcessingService bookProcessingService) =>
             this.bookProcessingService = bookProcessingService;
-        }
 
         [HttpPost]
         public async ValueTask<ActionResult<Book>> PostBookAsync(Book book)

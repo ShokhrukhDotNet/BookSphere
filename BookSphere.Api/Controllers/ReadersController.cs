@@ -20,10 +20,8 @@ namespace BookSphere.Api.Controllers
     {
         private readonly IReaderProcessingService readerProcessingService;
 
-        public ReadersController(IReaderProcessingService readerProcessingService)
-        {
+        public ReadersController(IReaderProcessingService readerProcessingService) =>
             this.readerProcessingService = readerProcessingService;
-        }
 
         [HttpPost]
         public async ValueTask<ActionResult<Reader>> PostReaderAsync(Reader reader)
@@ -62,11 +60,15 @@ namespace BookSphere.Api.Controllers
         {
             try
             {
-                return await this.readerProcessingService.RetrieveReaderByIdAsync(readerId);
+                Reader reader =
+                    await this.readerProcessingService.RetrieveReaderByIdAsync(readerId);
+
+                return Ok(reader);
             }
-            catch (ReaderDependencyException readerDependencyException)
+            catch (ReaderValidationException readerValidationException)
+                when (readerValidationException.InnerException is NotFoundReaderException)
             {
-                return InternalServerError(readerDependencyException.InnerException);
+                return NotFound(readerValidationException.InnerException);
             }
             catch (ReaderValidationException readerValidationException)
                 when (readerValidationException.InnerException is InvalidReaderException)
@@ -74,9 +76,16 @@ namespace BookSphere.Api.Controllers
                 return BadRequest(readerValidationException.InnerException);
             }
             catch (ReaderValidationException readerValidationException)
-                when (readerValidationException.InnerException is NotFoundReaderException)
             {
-                return NotFound(readerValidationException.InnerException);
+                return BadRequest(readerValidationException.InnerException);
+            }
+            catch (ReaderDependencyValidationException readerDependencyValidationException)
+            {
+                return BadRequest(readerDependencyValidationException.InnerException);
+            }
+            catch (ReaderDependencyException readerDependencyException)
+            {
+                return InternalServerError(readerDependencyException.InnerException);
             }
             catch (ReaderServiceException readerServiceException)
             {
@@ -123,8 +132,13 @@ namespace BookSphere.Api.Controllers
                 return BadRequest(readerValidationException.InnerException);
             }
             catch (ReaderDependencyValidationException readerDependencyValidationException)
+                when (readerDependencyValidationException.InnerException is AlreadyExistReaderException)
             {
                 return Conflict(readerDependencyValidationException.InnerException);
+            }
+            catch (ReaderDependencyValidationException readerDependencyValidationException)
+            {
+                return BadRequest(readerDependencyValidationException.InnerException);
             }
             catch (ReaderDependencyException readerDependencyException)
             {
